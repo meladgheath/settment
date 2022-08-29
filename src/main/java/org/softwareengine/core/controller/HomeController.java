@@ -73,6 +73,13 @@ import java.util.Locale;
                     onSettemeltButton();
                 }
             });
+            view.accountButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    onAccountButton();
+                }
+            });
+
         }
         private void onBankButton() {
             banksController control = new banksController();
@@ -91,5 +98,8 @@ import java.util.Locale;
             view.root.setCenter(control.view.getRoot());
         }
 
-
+        private void onAccountButton() {
+            accountController control = new accountController();
+            view.root.setCenter(control.view.getRoot());
+        }
     }
