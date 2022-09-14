@@ -36,7 +36,7 @@ import java.util.Locale;
 
             
 
-            Locale lang = new Locale("en") ;
+            Locale lang = new Locale("ar") ;
             Locale.setDefault(lang);
 
            view = new Home();

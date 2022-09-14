@@ -47,22 +47,21 @@ public class convenantController {
     private void setupLanguages() {
         languages lang = new languages();
 
-//            view.nameTex.setText(lang.getWord("name"));
-        view.nameTx.setText(lang.getWord("name"));
+        view.nameTx.setText(lang.getWord("convenantName"));
         view.bankTx.setText(lang.getWord("bank"));
         view.idTx.setText(lang.getWord("CovenantID"));
         view.valueTx.setText(lang.getWord("value"));
         view.descTx.setText(lang.getWord("description"));
         view.recipientTx.setText(lang.getWord("recipient"));
         view.accountTx.setText(lang.getWord("account"));
-
         view.saveButton.setText(lang.getWord("save"));
 
-        ((TableColumn) view.tableView.getColumns().get(0)).setText(lang.getWord("id"));//id
+
+        ((TableColumn) view.tableView.getColumns().get(0)).setText(lang.getWord("id"));//seq
         ((TableColumn) view.tableView.getColumns().get(1)).setText(lang.getWord("number"));//id
         ((TableColumn) view.tableView.getColumns().get(2)).setText(lang.getWord("name"));//name
-        ((TableColumn) view.tableView.getColumns().get(3)).setText(lang.getWord("bank"));//bank
-        ((TableColumn) view.tableView.getColumns().get(4)).setText(lang.getWord("recipient"));//recipient
+        ((TableColumn) view.tableView.getColumns().get(3)).setText(lang.getWord("recipient"));//recipient
+        ((TableColumn) view.tableView.getColumns().get(4)).setText(lang.getWord("bank"));//bank
         ((TableColumn) view.tableView.getColumns().get(5)).setText(lang.getWord("debit"));//debit
         ((TableColumn) view.tableView.getColumns().get(6)).setText(lang.getWord("credit"));//credit
         ((TableColumn) view.tableView.getColumns().get(7)).setText(lang.getWord("account"));//account
@@ -114,26 +113,19 @@ public class convenantController {
         view.tableView.getColumns().add(debit);
         view.tableView.getColumns().add(credit);
         view.tableView.getColumns().add(account);
-
-
         getTableDetail();
-
     }
 
     private void getTableDetail() throws SQLException {
         Covenant model = new Covenant();
         view.tableView.setItems(model.getInfo());
-
     }
-
-
     private EventHandler<ActionEvent> onBank_V_Action() {
         return new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 
                 dialog = new FXDialog(view.pane, "Banks List . . . ", false);
-
 
                 banks bank = new banks();
 
@@ -146,7 +138,6 @@ public class convenantController {
 
                     while (i < size)
                         dialog.listView.getItems().add(bank.getInfo().get(i++).getName());
-
 
                     dialog.show();
                     dialog.listView.setOnKeyPressed(OnListPressed(way));
@@ -181,7 +172,6 @@ public class convenantController {
 
                     while (i < size)
                         dialog.listView.getItems().add(model.getInfo().get(i++).getName());
-
 
                     dialog.show();
                     dialog.listView.setOnKeyPressed(OnListPressed(way));
@@ -222,14 +212,9 @@ public class convenantController {
                 }
             };
         }
-
-
         private void ListEvent (String way) {
 
-
             int index;
-
-
             index = dialog.listView.getSelectionModel().getSelectedIndex();
 
             switch (way) {
@@ -255,8 +240,6 @@ public class convenantController {
 
             }
         }
-
-
         private EventHandler<ActionEvent> onPrintButton () {
             return new EventHandler<ActionEvent>() {
                 @Override
@@ -298,6 +281,3 @@ public class convenantController {
             };
         }
     }
-
-
-

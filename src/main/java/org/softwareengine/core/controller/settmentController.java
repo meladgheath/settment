@@ -49,7 +49,7 @@ public class settmentController {
         private void setupLanguages() {
             languages lang = new languages();
 
-            view.nameTx.setText(lang.getWord("name"));
+            view.nameTx.setText(lang.getWord("constraint"));
             view.covnenatIDTX.setText(lang.getWord("CovenantID"));
             view.debitTX.setText(lang.getWord("debit"));
             view.creditTX.setText(lang.getWord("credit"));
@@ -66,7 +66,6 @@ public class settmentController {
                 view.root.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
             else
                 view.root.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-
         }
 
         private void initiate() throws SQLException {
@@ -83,8 +82,6 @@ public class settmentController {
             TableColumn<Integer, Transaction> seq = new TableColumn<>();
             TableColumn<Integer,Transaction> id = new TableColumn<>();
             TableColumn<String, Transaction> name = new TableColumn<>();
-
-
             TableColumn<Double,Transaction> debit  = new TableColumn<>();
             TableColumn<Double,Transaction> credit = new TableColumn<>();
 
@@ -92,7 +89,6 @@ public class settmentController {
             seq.setCellValueFactory(new PropertyValueFactory<>("seq"));
             id.setCellValueFactory(new PropertyValueFactory<>("covnenatID"));
             name.setCellValueFactory(new PropertyValueFactory<>("name"));
-
             debit.setCellValueFactory(new PropertyValueFactory<>("debit"));
             credit.setCellValueFactory(new PropertyValueFactory<>("credit"));
 
@@ -117,7 +113,6 @@ public class settmentController {
                 model.saveif();
 
             view.tableView.setItems(model.getInfo());
-
         }
 
 
@@ -127,10 +122,7 @@ public class settmentController {
                 public void handle(ActionEvent event) {
 
                     dialog = new FXDialog(view.pane, "covenant List . . . ", true);
-
-
                     Covenant model = new Covenant();
-
 
                     int i = 0;
                     int size = 0;
@@ -139,27 +131,12 @@ public class settmentController {
                         System.out.println("the size is " + size);
 
                         while (i < size)
-                            dialog.listView.getItems().add(model.getInfo().get(i++).getName());
-
+                            dialog.listView.getItems().add(model.getInfo().get(i++).getId()+"");
 
                         dialog.show();
                         dialog.listView.setOnKeyPressed(OnListPressed());
                         dialog.listView.setOnMouseClicked(OnMouseClick());
-
-
-                        dialog.dialog.setOnDialogClosed(new EventHandler<JFXDialogEvent>() {
-                            @Override
-                            public void handle(JFXDialogEvent event) {
-
-                                try {
-                                    getTableDetail();
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        });
-
+                        dialog.dialog.setOnDialogClosed(onDialogClose());
                         dialog.textField.setOnAction(onDialogTextFieldAction());
 
                     } catch (SQLException e) {
@@ -170,6 +147,19 @@ public class settmentController {
             };
         }
 
+        private EventHandler<JFXDialogEvent> onDialogClose() {
+            return new EventHandler<JFXDialogEvent>() {
+                @Override
+                public void handle(JFXDialogEvent event) {
+                    try {
+                        getTableDetail();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            };
+        }
     private EventHandler<ActionEvent> onDialogTextFieldAction() {
         return new EventHandler<ActionEvent>() {
             @Override
@@ -184,8 +174,8 @@ public class settmentController {
 
                 try {
                     cov = cov.getInfoWHEREid();
-                    dialog.listView.getItems().add(cov.getName());
                     covenantID = cov.getId();
+                    dialog.listView.getItems().add(covenantID+"");
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -198,8 +188,7 @@ public class settmentController {
             return new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-//                    if (event.getClickCount() == 2)
-              event();
+                      event();
                     dialog.dialog.close();
                 }
             };
@@ -209,11 +198,8 @@ public class settmentController {
             return new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent event) {
-//                    if (event.getCode() != KeyCode.ENTER)
-//                        return;
                         event();
                         dialog.dialog.close();
-
                 }
             };
     }
@@ -224,14 +210,11 @@ public class settmentController {
         try {
             covenantID = cov.getInfoWHEREid().getId();
             String name = cov.getInfoWHEREid().getName();
-            System.out.println(name);
             view.covnenatID.setText(name);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
-
         private EventHandler<MouseEvent> OnMouseClick () {
             return new EventHandler<MouseEvent>() {
                 @Override
@@ -258,9 +241,7 @@ public class settmentController {
                 }
             };
         }
-
         private void ListEvent () {
-
             int index;
             index = dialog.listView.getSelectionModel().getSelectedIndex();
 
@@ -274,7 +255,6 @@ public class settmentController {
                         e.printStackTrace();
                     }
             }
-
         private EventHandler<ActionEvent> OnSaveButton () {
             return new EventHandler<ActionEvent>() {
                 @Override
@@ -299,7 +279,6 @@ public class settmentController {
                 }
             };
         }
-
         private EventHandler<ActionEvent> onPrintButton() {
             return new EventHandler<ActionEvent>() {
                 @Override
@@ -308,16 +287,16 @@ public class settmentController {
                     report re = new report();
 
                     try {
-                        JasperPrint print = re.getReport(covenantID);
+                        Covenant cov = new Covenant();
+                        cov.setId(covenantID);
+                        String name = cov.getInfoWHERErecipient().getRecipient();
+                        JasperPrint print = re.getReport(view.tableView.getItems(),name);
                         JasperViewer.viewReport(print,false);
                     } catch (JRException e) {
                         e.printStackTrace();
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-
-
-
                 }
             };
         }

@@ -125,7 +125,7 @@ public class Covenant {
 
     public ObservableList<Covenant> getInfo() throws SQLException {
         ObservableList<Covenant> list = FXCollections.observableArrayList();
-//            String sql = "SELECT * FROM item ORDER BY id";
+
         String sql = "SELECT id , name , recipient,(SELECT name from banks WHERE id = banks) as bank,desc " +
                 ", debit, credit , account FROM Covnenat " ;
 
@@ -167,6 +167,20 @@ public class Covenant {
         one.setId(resultSet.getInt("id"));
         one.setName(resultSet.getString("name"));
 
+        DatabaseService.CloseConnection();
+
+        return one ;
+    }
+
+    public Covenant getInfoWHERErecipient() throws SQLException {
+        String sql = "SELECT recipient FROM covnenat where id = "+this.id;
+
+        DatabaseService.openConnection();
+        Statement stat = DatabaseService.connection.createStatement();
+        ResultSet resultSet = stat.executeQuery(sql);
+        resultSet.next();
+        Covenant one = new Covenant();
+        one.setRecipient(resultSet.getString("recipient"));
         DatabaseService.CloseConnection();
 
         return one ;

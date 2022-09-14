@@ -11,10 +11,6 @@ import java.util.Objects;
 
 public class Main extends Application {
     public static void main(String[] args) {
-
-//        JasperReport jr ;
-
-
         launch(args);
     }
 
@@ -32,26 +28,20 @@ public class Main extends Application {
                 e.printStackTrace();
             }
         }
-
         primaryStage.show();
-
     }
-
     public static boolean checkDB() {
-//        File file = new File(System.getProperty("user.home")+"\\db.db") ;
         File file = new File(System.getProperty("user.home")+"/db.db") ;
         return (file.exists()) ;
     }
     public static void putItThere() throws IOException {
 
         InputStream in = Main.class.getResourceAsStream("/database/db.db") ;
-        /*OutputStream out = new FileOutputStream(System.getProperty("user.home")+"\\db.db");*/
         OutputStream out = new FileOutputStream(System.getProperty("user.home")+"/db.db");
         int i  ;
         byte[] buf = new byte[1024] ;
         while ((i=in.read(buf)) != -1)
             out.write(buf, 0 , i);
-
         out.close();
         in.close();
     }
