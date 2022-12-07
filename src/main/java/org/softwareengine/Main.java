@@ -3,22 +3,30 @@ import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import org.softwareengine.core.controller.loginController;
 import org.softwareengine.core.model.Paths;
 import org.softwareengine.core.controller.HomeController;
+import org.softwareengine.utils.service.ArabicNumberToWords;
+
 
 import java.io.*;
 import java.util.Objects;
 
 public class Main extends Application {
     public static void main(String[] args) {
+
         launch(args);
+
+//        System.out.println(n.getString("21",""));
+//        System.out.println(n.getString("12",""));
+
     }
 
     @Override
-    public void start(Stage primaryStage) {
-        HomeController control = new HomeController();
+    public void start(Stage primaryStage) throws FileNotFoundException {
+       /* HomeController control = new HomeController();
         primaryStage.setScene(control.view.getScene());
-        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(Paths.ICONS.getPath()))));
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(Paths.ICONS.getPath()))));*/
 
         if (!checkDB()) {
             try {
@@ -28,6 +36,9 @@ public class Main extends Application {
                 e.printStackTrace();
             }
         }
+
+        loginController control = new loginController(primaryStage);
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(Paths.ICONS.getPath())))) ;
         primaryStage.show();
     }
     public static boolean checkDB() {

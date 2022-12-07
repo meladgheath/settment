@@ -86,7 +86,7 @@ public class accountController {
                 try {
                     model.setNumber(model.getInfo().get(index).getNumber());
 
-//                    model.delete();
+                    model.delete();
                     getTableDetail();
                 } catch (SQLException e) {
                     e.printStackTrace();

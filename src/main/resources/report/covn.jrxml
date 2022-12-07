@@ -27,7 +27,7 @@
 	<title>
 		<band height="210" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="0" width="555" height="95" backcolor="#000000" uuid="6c6ca4e1-17cd-4913-93d6-5e670ea9ae8a"/>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="95" backcolor="#007800" uuid="6c6ca4e1-17cd-4913-93d6-5e670ea9ae8a"/>
 				<textField>
 					<reportElement style="Title" x="61" y="0" width="451" height="66" forecolor="#FFFFFF" uuid="6a919e51-11d6-447c-ba6c-7ae46904004e">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>

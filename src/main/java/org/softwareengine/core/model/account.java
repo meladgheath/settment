@@ -58,6 +58,76 @@ public class account {
     }
 
 
+    public ObservableList<account> getInfoWHERENumber() throws SQLException {
+        ObservableList<account> list = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM account WHERE number = '"+this.number+"'";
+
+        DatabaseService.openConnection();
+        Statement statement = DatabaseService.connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        int i = 0 ;
+        while (resultSet.next()) {
+            account one = new account() ;
+
+            one.setName(resultSet.getString("name"));
+            one.setNumber(resultSet.getString("number"));
+
+            list.add(one);
+        }
+        return list ;
+    }
+    public account getInfoWHERENumberAllon() throws SQLException {
+
+        String sql = "SELECT * FROM account WHERE number = '"+this.number+"'";
+
+        DatabaseService.openConnection();
+        Statement statement = DatabaseService.connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+
+
+        resultSet.next() ;
+            account one = new account() ;
+
+            one.setName(resultSet.getString("name"));
+            one.setNumber(resultSet.getString("number"));
+
+
+
+        return one ;
+    }
+    public ObservableList<account> getWHERElike() throws SQLException {
+        ObservableList<account> list = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM account WHERE name like '%"+this.name+"%'";
+
+        DatabaseService.openConnection();
+        Statement statement = DatabaseService.connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        int i = 0 ;
+        while (resultSet.next()) {
+            account one = new account() ;
+
+//            one.setId(resultSet.getInt("id"));
+            one.setName(resultSet.getString("name"));
+            one.setNumber(resultSet.getString("number"));
+
+            list.add(one);
+        }
+        return list ;
+    }
+
+    public void  delete() throws SQLException {
+        ObservableList<account> list = FXCollections.observableArrayList();
+        String sql = "DELETE FROM account WHERE number = '"+this.number+"'";
+
+        DatabaseService.openConnection();
+        Statement statement = DatabaseService.connection.createStatement();
+
+        System.out.println(sql);
+        statement.executeUpdate(sql);
+    }
+
 
     public ObservableList<account> getInfo() throws SQLException {
         ObservableList<account> list = FXCollections.observableArrayList();

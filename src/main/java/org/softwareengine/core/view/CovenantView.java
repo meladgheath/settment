@@ -2,10 +2,7 @@ package org.softwareengine.core.view;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.scene.control.Button;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -42,6 +39,11 @@ public class CovenantView {
         public TableView tableView ;
 
 
+        public ContextMenu tableMenu ;
+        public  Menu printMenu ;
+
+        public MenuItem CovenantPrintMenu;
+
 
     public CovenantView(){
 
@@ -70,15 +72,30 @@ public class CovenantView {
             VaccountButton = new Button("V");
 
 
+            tableMenu = new ContextMenu();
+            CovenantPrintMenu = new MenuItem();
+            printMenu = new Menu();
+
+            printMenu.getItems().add(CovenantPrintMenu);
+            tableMenu.getItems().add(printMenu);
+
+
+            tableMenu.setPrefHeight(60);
+            tableMenu.setPrefWidth(60);
+
+
             root.setPrefWidth(200);
 
             tableView = new TableView();
             tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
+            tableView.setContextMenu(tableMenu);
             tableView.setPrefHeight(800);
 
             bank   .setDisable(true);
             account.setDisable(true);
+
+
+
 
             HBox top = new HBox( );
 

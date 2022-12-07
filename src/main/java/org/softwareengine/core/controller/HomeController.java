@@ -4,20 +4,28 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import org.softwareengine.core.view.Home;
 import org.softwareengine.config.languages;
 import org.softwareengine.core.model.Paths;
 
+import java.sql.SQLException;
 import java.util.Locale;
 
     public class HomeController {
 
         public Home view;
+        public Stage primaryStage ;
 
         public HomeController() {
             initiated();
             setupLanguages() ;
 
+        }
+        public HomeController(Stage primaryStage) {
+            this.primaryStage = primaryStage ;
+            initiated();
+            setupLanguages() ;
         }
 
         private void setupLanguages(){
@@ -25,11 +33,12 @@ import java.util.Locale;
         languages lang = new languages();
 
         view.employmentButton.setTooltip(new Tooltip(lang.getWord("item") ));
-        view.bankButton        .setTooltip(new Tooltip(lang.getWord("bank") ));
-        view.accountButton.setTooltip(new Tooltip(lang.getWord("types")));
-
-        view.amountButton      .setTooltip(new Tooltip(lang.getWord("amounts")));
-        view.settingButton  .setTooltip(new Tooltip(lang.getWord("setting")));
+        view.bankButton      .setTooltip(new Tooltip(lang.getWord("bank") ));
+        view.covenantButton  .setTooltip(new Tooltip(lang.getWord("convenant")));
+        view.settlementButton.setTooltip(new Tooltip(lang.getWord("settlement")));
+        view.accountButton   .setTooltip(new Tooltip(lang.getWord("types")));
+        view.amountButton    .setTooltip(new Tooltip(lang.getWord("amounts")));
+        view.settingButton   .setTooltip(new Tooltip(lang.getWord("setting")));
         }
 
         public void initiated() {

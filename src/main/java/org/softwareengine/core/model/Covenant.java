@@ -12,7 +12,7 @@ import java.sql.Statement;
 public class Covenant {
 
     private int seq ;
-    private int id ;
+    private String id ;
     private String account ;
     private String name ;
     private String recipient ;
@@ -47,11 +47,11 @@ public class Covenant {
         this.brnName = brnName;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -109,7 +109,7 @@ public class Covenant {
         DatabaseService.openConnection();
         PreparedStatement ps = DatabaseService.connection.prepareStatement(sql);
 
-        ps.setInt(1,this.id);
+        ps.setString(1,this.id);
         ps.setString(2,this.name);
         ps.setString(3,this.recipient);
         ps.setInt(4,this.brnID);
@@ -138,7 +138,7 @@ public class Covenant {
             Covenant one = new Covenant() ;
 
             one.setSeq(++i);
-            one.setId(resultSet.getInt("id"));
+            one.setId(resultSet.getString("id"));
             one.setName(resultSet.getString("name"));
             one.setRecipient(resultSet.getString("recipient"));
             one.setBrnName(resultSet.getString("bank"));
@@ -153,7 +153,7 @@ public class Covenant {
 
     public Covenant getInfoWHEREid() throws SQLException {
         ObservableList<Covenant> list = FXCollections.observableArrayList();
-        String sql = "SELECT * FROM Covnenat WHERE id = "+this.id;
+        String sql = "SELECT id , name , desc , (SELECT name FROM banks where id = banks) as b FROM Covnenat WHERE id = '"+this.id+"'";
 
         DatabaseService.openConnection();
         Statement statement = DatabaseService.connection.createStatement();
@@ -164,12 +164,25 @@ public class Covenant {
 
         Covenant one = new Covenant();
 
-        one.setId(resultSet.getInt("id"));
+        one.setId(resultSet.getString("id"));
         one.setName(resultSet.getString("name"));
+        one.setDes(resultSet.getString("desc"));
+        one.setBrnName(resultSet.getString("b"));
 
+        resultSet.close();
         DatabaseService.CloseConnection();
 
         return one ;
+    }
+
+    public void delete() throws SQLException {
+        String sql = "DELETE FROM Covnenat WHERE id = "+this.id;
+        sql = sql +  "; DELETE FROM TRANSACTIONs WHERE covnenatID = "+this.id;
+
+        DatabaseService.openConnection();
+        Statement statement = DatabaseService.connection.createStatement();
+        statement.executeUpdate(sql);
+
     }
 
     public Covenant getInfoWHERErecipient() throws SQLException {

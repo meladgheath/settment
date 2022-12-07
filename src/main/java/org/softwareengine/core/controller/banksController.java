@@ -20,16 +20,12 @@ public class banksController {
 
         public banksController() {
             view = new bankview();
-
-
             try {
                 initiate();
                 setupLanguages();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
-
         }
 
         private void setupLanguages() {
@@ -39,7 +35,6 @@ public class banksController {
             view.referenceTex.setText(lang.getWord("reference"));
             view.saveButton.setText(lang.getWord("save"));
             view.printButton.setText(lang.getWord("print"));
-
 
             ((TableColumn) view.tableView.getColumns().get(0)).setText(lang.getWord("id"));//id
             ((TableColumn) view.tableView.getColumns().get(1)).setText(lang.getWord("name"));//name
@@ -55,29 +50,41 @@ public class banksController {
         private void initiate() throws SQLException {
             getTableColum();
 
-
-
             view.tableView.setOnKeyPressed(onTablePressed());
             view.saveButton.setOnAction(OnSaveButton());
             view.printButton.setOnAction(onPrintButton());
-
-
-
+            view.tableView.setOnKeyPressed(onTablePressed());
         }
 
-        private void getTableColum() throws SQLException {
+    private EventHandler<KeyEvent> onTablePressed () {
+        return new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() != KeyCode.DELETE)
+                    return;
+
+                banks model = new banks();
+                int index = view.tableView.getSelectionModel().getSelectedIndex() ;
+                try {
+                    model.setId(model.getInfoID().get(index).getId());
+                    model.delete();
+                    getTableDetail();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
 
 
 
 
+            }} ;
+    }
+
+    private void getTableColum() throws SQLException {
             TableColumn<Integer, banks> id = new TableColumn<>();
             TableColumn<String, banks> name = new TableColumn<>();
             TableColumn<String, banks> reference = new TableColumn<>();
 
-
-
             id.setCellValueFactory(new PropertyValueFactory<>("id"));
-
             name    .setCellValueFactory(new PropertyValueFactory<>("name"));
             reference.setCellValueFactory(new PropertyValueFactory<>("referenceNumber"));
 
@@ -87,89 +94,12 @@ public class banksController {
             view.tableView.getColumns().add(id);
             view.tableView.getColumns().add(name);
             view.tableView.getColumns().add(reference);
-
-
             getTableDetail();
-
         }
 
         private void getTableDetail() throws SQLException {
             banks model = new banks();
-
             view.tableView.setItems(model.getInfo());
-
-        }
-
-
-        private EventHandler<KeyEvent> onTablePressed () {
-            return new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent event) {
-/*
-
-
-                    String text [] = {
-                            "name","code","package","value"
-                    } ;
-                    dialog = new UpdateDialog(view.pane ,"update item . . . ",3,text) ;
-
-                    Item model = new Item() ;
-
-                    int index = view.tableView.getSelectionModel().getSelectedIndex() ;
-
-                    String itemName = "" ;
-                    String code = "" ;
-                    String packages = "" ;
-                    String value = "" ;
-                    try {
-                        itemID   = model.getInfoID().get(index).getId() ;
-                        System.out.println("the ID = "+itemID);
-                        itemName = model.getInfo().get(index).getName() ;
-                        System.out.println("the name = "+itemName);
-                        code = model.getInfo().get(index).getCode()+"" ;
-                        packages = model.getInfo().get(index).getPackages()+"";
-                        value = model.getInfo().get(index).getValue()+"";
-
-                        dialog.tf1.setText(itemName);//t1 for item name
-                        dialog.tf2.setText(code); // t2 for code item
-                        dialog.tf3.setText(packages); // t3 for package
-                        dialog.tf4.setText(value);// t4 for value or price
-
-                        dialog.tf1.setId("name");
-                        dialog.tf2.setId("code");
-                        dialog.tf3.setId("package");
-                        dialog.tf4.setId("value");
-
-
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    }
-
-
-                    dialog.show();
-
-                    dialog.tf1.setOnKeyPressed(onUpdate());
-                    dialog.tf2.setOnKeyPressed(onUpdate());
-                    dialog.tf3.setOnKeyPressed(onUpdate());
-                    dialog.tf4.setOnKeyPressed(onUpdate());
-*/
-                    if (event.getCode() != KeyCode.DELETE)
-                        return;
-
-                    banks model = new banks();
-                    int index = view.tableView.getSelectionModel().getSelectedIndex() ;
-                    try {
-                        model.setId(model.getInfoID().get(index).getId());
-                        model.delete();
-                        getTableDetail();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-
-
-
-
-                }} ;
         }
 
 

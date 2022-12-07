@@ -12,12 +12,22 @@ import java.sql.Statement;
 public class Transaction {
 
     private int seq ;
-    private int id ;
-    private int covnenatID ;
+    private int  id ;
+    private String covnenatID ;
     private String name ;
+
+    private String account ;
     private double debit ;
     private double credit ;
 
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
 
     public int getSeq() {
         return seq;
@@ -35,11 +45,11 @@ public class Transaction {
         this.id = id;
     }
 
-    public int getCovnenatID() {
+    public String getCovnenatID() {
         return covnenatID;
     }
 
-    public void setCovnenatID(int covnenatID) {
+    public void setCovnenatID(String covnenatID) {
         this.covnenatID = covnenatID;
     }
 
@@ -68,9 +78,10 @@ public class Transaction {
     }
 
     public void saveif() throws SQLException {
-        String sql = "INSERT into transactions (covnenatID,name,debit,credit)  " +
-                " SELECT id ,name ,debit , credit   FROM Covnenat where id = "+this.covnenatID;
+        String sql = "INSERT into transactions (covnenatID,name,debit,credit,account)  " +
+                " SELECT id ,name ,debit , credit ,account   FROM Covnenat where id = '"+this.covnenatID+"'";
 
+        System.out.println(sql);
         DatabaseService.openConnection();
         Statement statement = DatabaseService.connection.createStatement();
         statement.executeUpdate(sql);
@@ -83,15 +94,16 @@ public class Transaction {
 
 
 
-        sql = "INSERT INTO transactions (covnenatID, name ,debit, credit) VALUES (?,?,?,?)";
+        sql = "INSERT INTO transactions (covnenatID, name ,debit, credit,account) VALUES (?,?,?,?,?)";
 
         DatabaseService.openConnection();
         PreparedStatement ps = DatabaseService.connection.prepareStatement(sql);
 
-        ps.setInt(1, this.covnenatID);
+        ps.setString(1, this.covnenatID);
         ps.setString(2, this.name);
         ps.setDouble(3, this.debit);
         ps.setDouble(4, this.credit);
+        ps.setString(5,this.account);
         ps.executeUpdate();
 
         DatabaseService.CloseConnection();
@@ -101,7 +113,7 @@ public class Transaction {
     public ObservableList<Transaction> getInfo() throws SQLException {
         ObservableList<Transaction> list = FXCollections.observableArrayList();
 
-        String sql = "SELECT * FROM transactions WHERE covnenatID = "+this.covnenatID ;
+        String sql = "SELECT * FROM transactions WHERE covnenatID = '"+this.covnenatID+"'" ;
 
         DatabaseService.openConnection();
         Statement statement = DatabaseService.connection.createStatement();
@@ -113,8 +125,9 @@ public class Transaction {
 
             one.setSeq(++i);
             one.setId(resultSet.getInt("id"));
-            one.setCovnenatID(resultSet.getInt("covnenatID"));
+            one.setCovnenatID(resultSet.getString("covnenatID"));
             one.setName(resultSet.getString("name"));
+            one.setAccount(resultSet.getString("account"));
             one.setCredit(resultSet.getDouble("credit"));
             one.setDebit(resultSet.getDouble("debit"));
 
@@ -126,7 +139,7 @@ public class Transaction {
         return list;
     }
     public  boolean Ishas () throws SQLException {
-        String sql = "SELECT count(*) as c FROM transactions WHERE covnenatID = "+this.covnenatID ;
+        String sql = "SELECT count(*) as c FROM transactions WHERE covnenatID = '"+this.covnenatID+"'" ;
 
         DatabaseService.openConnection();
         Statement stat = DatabaseService.connection.createStatement();
